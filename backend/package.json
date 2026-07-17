@@ -1,0 +1,21 @@
+{
+  "name": "acme-salary-backend",
+  "version": "1.0.0",
+  "description": "API for ACME salary management",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "node src/server.js",
+    "seed": "node scripts/seed.js",
+    "test": "jest --runInBand"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.3.0",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "@faker-js/faker": "^8.4.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
+  }
+}
