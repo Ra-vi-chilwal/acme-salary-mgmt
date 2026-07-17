@@ -45,7 +45,7 @@ function getSalaryHistory(db, employeeId) {
       `SELECT id, old_base_salary AS oldBaseSalary, new_base_salary AS newBaseSalary,
               old_bonus AS oldBonus, new_bonus AS newBonus, reason, effective_date AS effectiveDate,
               changed_at AS changedAt
-       FROM salary_history WHERE employee_id = ? ORDER BY changed_at DESC`
+       FROM salary_history WHERE employee_id = ? ORDER BY id DESC`
     )
     .all(employeeId);
 }
