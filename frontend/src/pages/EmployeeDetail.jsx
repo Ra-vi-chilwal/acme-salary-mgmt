@@ -10,6 +10,7 @@ export default function EmployeeDetail() {
 
   const [salaryForm, setSalaryForm] = useState({ baseSalary: "", bonus: "", reason: "", effectiveDate: "" });
   const [saving, setSaving] = useState(false);
+  const [successMsg, setSuccessMsg] = useState("");
 
   function loadEmployee() {
     api.getEmployee(id).then(setEmployee).catch((err) => setError(err.message));
@@ -36,13 +37,24 @@ export default function EmployeeDetail() {
     e.preventDefault();
     setSaving(true);
     setError(null);
+    setSuccessMsg("");
+
+    const baseSalary = Number(salaryForm.baseSalary);
+    if (!Number.isFinite(baseSalary) || baseSalary < 0) {
+      setError("Base salary must be a valid positive number");
+      setSaving(false);
+      return;
+    }
+
     try {
       await api.updateSalary(id, {
-        baseSalary: Number(salaryForm.baseSalary),
-        bonus: Number(salaryForm.bonus),
+        baseSalary,
+        bonus: Number(salaryForm.bonus) || 0,
         reason: salaryForm.reason,
         effectiveDate: salaryForm.effectiveDate,
       });
+      setSuccessMsg("✓ Salary updated");
+      setTimeout(() => setSuccessMsg(""), 3000);
       loadEmployee();
     } catch (err) {
       setError(err.message);
@@ -126,10 +138,11 @@ export default function EmployeeDetail() {
               />
             </label>
             {error && <p className="text-red-600 text-xs">{error}</p>}
+            {successMsg && <p className="text-emerald-600 text-xs">{successMsg}</p>}
             <button
               type="submit"
               disabled={saving}
-              className="bg-slate-900 text-white text-sm px-3 py-1.5 rounded-md disabled:opacity-50"
+              className="bg-slate-900 text-white text-sm px-3 py-1.5 rounded-md disabled:opacity-50 w-full"
             >
               {saving ? "Saving..." : "Save salary change"}
             </button>
@@ -145,8 +158,8 @@ export default function EmployeeDetail() {
               {history.map((h) => (
                 <li key={h.id} className="border-b border-slate-100 pb-2 last:border-0">
                   <div className="flex justify-between">
-                    <span>{h.oldBaseSalary?.toLocaleString() ?? "—"} &rarr; {h.newBaseSalary.toLocaleString()}</span>
-                    <span className="text-slate-400">{h.effectiveDate}</span>
+                    <span>{h.oldBaseSalary?.toLocaleString() ?? "—"} → {h.newBaseSalary.toLocaleString()}</span>
+                    <span className="text-slate-400 text-xs">{h.effectiveDate}</span>
                   </div>
                   {h.reason && <div className="text-slate-500 text-xs mt-0.5">{h.reason}</div>}
                 </li>
