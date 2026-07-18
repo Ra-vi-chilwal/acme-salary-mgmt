@@ -1,6 +1,11 @@
 // Salary changes always go through here so we never overwrite a
 // salary without leaving a history row behind - that's the whole
 // point of not just editing a spreadsheet cell.
+//
+// The transaction ensures both operations (insert history, update employee)
+// are atomic - either both succeed or both rollback. If the insert succeeds
+// but the update fails, the entire change is rolled back and the caller gets
+// an error instead of a half-updated state.
 
 function updateSalary(db, employeeId, { baseSalary, bonus, reason, effectiveDate }) {
   const employee = db.prepare("SELECT * FROM employees WHERE id = ?").get(employeeId);

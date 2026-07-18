@@ -40,3 +40,14 @@ npm test
   paginated employee grid, Recharts for the analytics charts.
 - Tests: Jest + Supertest against the real Express app with an
   in-memory SQLite DB per test run.
+
+## Notes
+
+- The seed script generates realistic 10,000 employee records across 6
+  countries and 8 departments. Each run wipes and rebuilds the table.
+- Salary history is audit-logged: every change creates a row in the
+  history table with old/new values, reason, and effective date.
+- All salary analytics (department avg, country totals, bands) are
+  computed in SQL so they scale linearly with data size.
+- The frontend connects to the backend API; set `VITE_API_URL` env var
+  at build time to point to your production backend.
