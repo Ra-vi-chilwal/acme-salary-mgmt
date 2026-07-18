@@ -11,6 +11,18 @@ function createApp(db = createDb()) {
   app.use(cors());
   app.use(express.json());
 
+  // Simple request logging — just timestamp + method + path + status
+  // if you need more detail (full payloads, response times), add
+  // morgan or similar here.
+  app.use((req, res, next) => {
+    const start = Date.now();
+    res.on("finish", () => {
+      const duration = Date.now() - start;
+      console.log(`[${new Date().toISOString()}] ${req.method} ${req.path} ${res.statusCode} (${duration}ms)`);
+    });
+    next();
+  });
+
   app.get("/api/health", (req, res) => res.json({ ok: true }));
 
   app.use("/api/employees", buildEmployeeRoutes(db));
