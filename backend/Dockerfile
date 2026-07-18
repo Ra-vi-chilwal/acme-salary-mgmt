@@ -13,4 +13,4 @@ COPY . .
 ENV PORT=4000
 EXPOSE 4000
 
-CMD sh -c "test -f salary.sqlite || npm run seed; node src/server.js"
+CMD sh -c "test -f \"${DB_PATH:-salary.sqlite}\" || npm run seed; node src/server.js"
