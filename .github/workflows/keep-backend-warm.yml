@@ -10,4 +10,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Ping backend health endpoint
-        run: curl -fsS https://acme-salary-backend.onrender.com/api/health
+        run: curl -fsS https://acme-salary-backend-fzk5.onrender.com/api/health

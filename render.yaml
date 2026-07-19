@@ -17,7 +17,7 @@ services:
     staticPublishPath: ./frontend/dist
     envVars:
       - key: VITE_API_URL
-        value: https://acme-salary-backend.onrender.com/api
+        value: https://acme-salary-backend-fzk5.onrender.com/api
     routes:
       - type: rewrite
         source: /*
