@@ -4,17 +4,11 @@ services:
     runtime: docker
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
-    plan: starter
+    plan: free
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
         value: production
-      - key: DB_PATH
-        value: /var/data/salary.sqlite
-    disk:
-      name: salary-data
-      mountPath: /var/data
-      sizeGB: 1
 
   - type: web
     name: acme-salary-frontend
