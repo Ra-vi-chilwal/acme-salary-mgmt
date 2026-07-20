@@ -1,53 +1,67 @@
 # ACME Salary Management
 
-Web app for ACME's HR Manager to manage salary data for ~10,000
-employees and answer questions about how the org pays people, instead
-of doing it all in spreadsheets.
+So you're tired of managing 10,000 employee salaries in Excel, that's messy.
 
-- `docs/REQUIREMENTS.md` — one-page requirements doc (read this first)
-- `docs/AI_USAGE_NOTES.md` — how AI tools were used while building this
-- `backend/` — Node.js + Express + SQLite API
-- `frontend/` — React (Vite) UI
+This is a web app where HR managers can actually *manage* employee salary data and quickly answer questions like:
+- "What's our average salary by department?"
+- "Who are our top-paid employees?"
+- "How much are we paying in India vs the US?"
 
-## Quick start
+Instead of digging through endless spreadsheets, you get a clean dashboard with charts and a searchable employee directory.
+
+## How to run it locally
+
+Pretty straightforward:
 
 ```bash
-# backend
+# Terminal 1: Start the backend
 cd backend
 npm install
-npm run seed        # generates 10,000 employees into salary.sqlite
-npm run dev          # starts API on http://localhost:4000
+npm run seed        # creates 10,000 fake employees (takes ~5 seconds)
+npm run dev         # runs the API on http://localhost:4000
 
-# frontend (separate terminal)
+# Terminal 2: Start the frontend
 cd frontend
 npm install
-npm run dev          # starts UI on http://localhost:5173
+npm run dev         # runs the website on http://localhost:5173
 ```
 
-## Tests
+Open your browser to **http://localhost:5173** and you're done. Search employees, click on one, update their salary, check out the dashboard charts.
+
+## Run the tests
 
 ```bash
 cd backend
 npm test
 ```
 
-## Stack
+18 tests, all should pass. Takes about a second.
 
-- Backend: Node.js, Express, better-sqlite3 (file-based relational DB,
-  no external DB server needed — fine at 10k rows and keeps setup to
-  zero infra).
-- Frontend: React + Vite, Tailwind CSS, TanStack Table for the
-  paginated employee grid, Recharts for the analytics charts.
-- Tests: Jest + Supertest against the real Express app with an
-  in-memory SQLite DB per test run.
+## What's inside
 
-## Notes
+**Backend:**
+- Node.js + Express — simple HTTP API
+- SQLite database — just a file, no separate database server to run
+- Seed script — generates 10,000 realistic employees
 
-- The seed script generates realistic 10,000 employee records across 6
-  countries and 8 departments. Each run wipes and rebuilds the table.
-- Salary history is audit-logged: every change creates a row in the
-  history table with old/new values, reason, and effective date.
-- All salary analytics (department avg, country totals, bands) are
-  computed in SQL so they scale linearly with data size.
-- The frontend connects to the backend API; set `VITE_API_URL` env var
-  at build time to point to your production backend.
+**Frontend:**
+- React + Vite — fast dev experience
+- Tailwind CSS — styling (looks clean, nothing fancy)
+- Recharts — charts for the analytics dashboard
+
+**Tests:**
+- Jest + Supertest — tests run against the real API with an in-memory database
+
+## How the data is stored
+
+This is the important part you asked about.
+
+### NOT JSON — it's a relational database
+
+We're using **SQLite**, which is a proper relational database (like MySQL or PostgreSQL, but file-based).
+
+The entire database lives in **one file**: `backend/salary.sqlite`
+
+### The two main tables
+
+**employees table:**
